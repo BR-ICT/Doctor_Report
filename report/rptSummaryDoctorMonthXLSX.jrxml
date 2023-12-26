@@ -1,0 +1,786 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 5.5.2  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptSummaryDoctorMonthXLSX" language="groovy" pageWidth="2900" pageHeight="595" orientation="Landscape" columnWidth="2860" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b954068b-5b15-493e-a300-79120de44b24">
+	<property name="ireport.zoom" value="1.0000000000000004"/>
+	<property name="ireport.x" value="1028"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DB2"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="130"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="865"/>
+	<parameter name="PMonthNumber" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PYearNumber" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+SUBSTR(DATERUNREPORT,7,2)||'/' || SUBSTR(DATERUNREPORT,5,2)||'/'|| CAST(CAST(SUBSTR(DATERUNREPORT,1,4)as INT) AS VARCHAR(200))  AS DATERN1
+,SUBSTR(A.UAIVDT,7,2) as Datess
+,SUBSTR(A.UAIVDT,5,2) as Monthss ,  CAST(SUBSTR(A.UAIVDT,1,4)as INT)  AS YEARS
+,TRIM(CUSTNAMES.OPCUA1) AS ADDR1,TRIM(CUSTNAMES.OPCUA2) as ADDR2,TRIM(CUSTNAMES.OPCUA3) as ADDR3,TRIM(CUSTNAMES.OPCUA4) as ADDR4,
+TRIM(CUSTNAMES.OPTOWN) as CITY,TRIM(jv.CTTX40) as Province,e.OKCUNM AS  OKCUNM2
+,SUM(C.MTTRQT*-1) MTTRQT,sum(c.MTCAWE * -1)AS MTCAWE,TRIM(ffff.NODOCTOR) AS NODOCTOR,ffff.DNAME,
+CASE 
+WHEN MIN (B.UBITNO) IN ('FFA2100L020','FFGS6001000','FFO1200L020'
+,'FFO1400L020','FF003001000','FF004001000','FF005001000'
+,'FF006001000','FF007001000','FF008001000','FF009001000'
+,'FF010001000','FF011001000','FF012001000','FF013001000'
+,'FF017001000','FF018001000','FF019001000','FF020001000'
+,'FF024000008','FF024001000','FF025000008','FF031001000'
+,'FF032001000','FF037001000','FF039001000' )
+THEN 'F' || GGGGG.NODOCUMENT
+ELSE GGGGG.NODOCUMENT
+END AS NODOCUMENT,
+MIN (B.UBITNO )
+FROM M3FDBPRD.ODHEAD A,M3FDBPRD.ODLINE B,M3FDBPRD.MITTRA C,M3FDBPRD.MITMAS D,
+     M3FDBPRD.OCUSMA E , brldta0100.PRODOCTOREST14 AS ffff ,BRLDTA0100.PRODOCTORAUTO AS GGGGG
+    ,M3FDBPRD.OCUSAD AS CUSTNAMES,M3FDBPRD.CSYTAB AS jv
+WHERE B.UBORNO = C.MTRIDN
+AND B.UBCONO = C.MTCONO
+AND GGGGG.NODOCUMENT <> ''
+AND C.MTTTYP = 31
+AND B.UBITNO = C.MTITNO
+AND A.UAORNO = B.UBORNO
+AND A.UACONO = B.UBCONO
+AND A.UACONO = 10
+AND CAST(SUBSTR(DATERUNREPORT,5,2)AS INT)=  $P{PMonthNumber}
+AND CAST(SUBSTR(DATERUNREPORT,1,4)as INT)= $P{PYearNumber}
+AND C.MTCONO = D.MMCONO
+AND C.MTITNO = D.MMITNO
+AND D.MMITGR BETWEEN 'SH01'
+AND 'SH07'
+AND A.UACONO = E.OKCONO
+AND A.UACUNO = E.OKCUNO
+AND A.UAIVDT  BETWEEN ffff.STARTDATE AND ffff.ENDDATE
+AND GGGGG.UBORNO=A.UAORNO
+AND CUSTNAMES.OPCUNO=A.UACUNO
+AND CUSTNAMES.OPCONO=A.UACONO
+AND OPADID='DELI02'
+AND jv.ctstco ='ECAR' AND jv.CTCONO = CUSTNAMES.OPCONO AND jv.ctstky = CUSTNAMES.OPECAR
+GROUP BY GGGGG.DATERUNREPORT,B.UBORNO,A.UAIVNO,A.UAIVDT,A.UACUNO,E.OKCUNM,RTRIM(E.OKCUA1)||' '||RTRIM(E.OKCUA2)||' '||RTRIM(E.OKCUA3)
+,ffff.NODOCTOR,ffff.DNAME,GGGGG.NODOCUMENT,CUSTNAMES.OPCUA1,CUSTNAMES.OPCUA2,CUSTNAMES.OPCUA3,CUSTNAMES.OPCUA4,CUSTNAMES.OPTOWN,jv.CTTX40,CUSTNAMES.OPCUNO
+ORDER BY REPLACE(GGGGG.NODOCUMENT, 'F', '')]]>
+	</queryString>
+	<field name="DATERN1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DATERN1"/>
+		<property name="com.jaspersoft.studio.field.name" value="DATERN1"/>
+	</field>
+	<field name="DATESS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DATESS"/>
+		<property name="com.jaspersoft.studio.field.name" value="DATESS"/>
+	</field>
+	<field name="MONTHSS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="MONTHSS"/>
+		<property name="com.jaspersoft.studio.field.name" value="MONTHSS"/>
+	</field>
+	<field name="YEARS" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="YEARS"/>
+		<property name="com.jaspersoft.studio.field.name" value="YEARS"/>
+	</field>
+	<field name="ADDR1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ADDR1"/>
+		<property name="com.jaspersoft.studio.field.name" value="ADDR1"/>
+	</field>
+	<field name="ADDR2" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ADDR2"/>
+		<property name="com.jaspersoft.studio.field.name" value="ADDR2"/>
+	</field>
+	<field name="ADDR3" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ADDR3"/>
+		<property name="com.jaspersoft.studio.field.name" value="ADDR3"/>
+	</field>
+	<field name="ADDR4" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ADDR4"/>
+		<property name="com.jaspersoft.studio.field.name" value="ADDR4"/>
+	</field>
+	<field name="CITY" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="CITY"/>
+		<property name="com.jaspersoft.studio.field.name" value="CITY"/>
+	</field>
+	<field name="PROVINCE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="PROVINCE"/>
+		<property name="com.jaspersoft.studio.field.name" value="PROVINCE"/>
+	</field>
+	<field name="OKCUNM2" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="OKCUNM2"/>
+		<property name="com.jaspersoft.studio.field.name" value="OKCUNM2"/>
+	</field>
+	<field name="MTTRQT" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="MTTRQT"/>
+		<property name="com.jaspersoft.studio.field.name" value="MTTRQT"/>
+	</field>
+	<field name="MTCAWE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="MTCAWE"/>
+		<property name="com.jaspersoft.studio.field.name" value="MTCAWE"/>
+	</field>
+	<field name="NODOCTOR" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="NODOCTOR"/>
+	</field>
+	<field name="DNAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DNAME"/>
+	</field>
+	<field name="NODOCUMENT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="NODOCUMENT"/>
+		<property name="com.jaspersoft.studio.field.name" value="NODOCUMENT"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="46">
+			<staticText>
+				<reportElement x="0" y="0" width="140" height="46" uuid="289b8736-1288-4992-98f6-800af1715d09"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[พนักงานตรวจโรค 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="0" width="135" height="46" uuid="90ffe6cf-5e71-4a06-99fb-073972915f97"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ทะเบียนพนักงานตรวจโรคสัตว์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1163" y="0" width="100" height="46" uuid="93bba494-c07a-4ef7-b017-d6ce49ac1c60"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[วันที่]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1263" y="26" width="174" height="20" uuid="219af5f6-c4cb-426c-8a3f-e1fcd2b80678"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ชื่อ-สกุล]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1437" y="26" width="131" height="20" uuid="a8616e4b-0240-4e55-9952-24dd31198184"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[เลขที่]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="275" y="0" width="140" height="46" uuid="4d401377-4fe6-4b7b-a77f-dfdbaaedabd5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[พนักงานตรวจโรค 2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="415" y="0" width="135" height="46" uuid="c50237dd-b1f0-418c-b858-a89d40835327"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ทะเบียนพนักงานตรวจโรคสัตว์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="550" y="0" width="140" height="46" uuid="19a4eaf3-c9a3-4edf-a765-f2cb6bbb288f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[พนักงานตรวจโรค 3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="690" y="0" width="135" height="46" uuid="057132a7-5ed5-4e7f-b179-7cad93f65f4a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ทะเบียนพนักงานตรวจโรคสัตว์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1263" y="0" width="867" height="26" uuid="1adf5c1c-59f0-4163-b9c4-de9f0d3d8d76"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[สถานที่ปลายที่]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2130" y="0" width="97" height="46" uuid="f4d77d18-d159-49af-a39c-c2dd74b962b6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ชนิดเนื่อสัตว์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2227" y="0" width="93" height="46" uuid="991513c1-cfce-4416-a043-6a8db4b377c5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[จำนวน(ตัว)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2320" y="0" width="99" height="46" uuid="61d65747-2bb7-422d-b0e6-026aa0e2e3e6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[น้ำหนัก(กิโลกรัม)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2419" y="0" width="172" height="26" uuid="0796f602-d7ef-4eec-a2b0-d72c4dabb183"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[วิธีการรับรอง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2419" y="26" width="79" height="20" uuid="569c2737-438e-4df6-bb66-40ce868dd026"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[รน.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2498" y="26" width="93" height="20" uuid="f4c4ebf5-0718-4f68-83d2-79191d5fcaee"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[บรรจุภัณฑ์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2591" y="0" width="111" height="46" uuid="4726b685-0bc4-4e21-b382-4b852cff29ba"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[เลขที่ใบ รน.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="825" y="0" width="182" height="46" uuid="e329cb7c-60da-4bd7-877d-7f66d4775138"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ชื่อโรงฆ่าสัตว์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1007" y="0" width="156" height="46" uuid="49ac4be3-f71a-462b-932f-5fa3285ce500"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ทะเบียนโรงฆ่าสัตว์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1568" y="26" width="125" height="20" uuid="13dabb6a-f36f-49df-bda7-e9b3b237a9a8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[หมู่]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1693" y="26" width="116" height="20" uuid="2ce9db77-40e7-4734-9e20-021a6b63b2c0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ถนน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1809" y="26" width="107" height="20" uuid="4df17c9c-bf0f-43fe-a3c2-390a151397dc"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ตำบล]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1916" y="26" width="107" height="20" uuid="8253e6d6-871d-4677-9041-c2193ad882a7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[อำเภอ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2023" y="26" width="107" height="20" uuid="f226b89f-e21e-4f2e-94f3-1291ee19c491"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[จังหวัด]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="35" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="140" height="35" uuid="3f7cb1cb-6840-4c42-9d57-2de051297944"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DNAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="0" width="135" height="35" uuid="787f5f09-b2b8-42dd-b1e2-898c0a77e778"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NODOCTOR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1163" y="0" width="100" height="35" uuid="aef4b6b4-1e49-4c86-9cbf-f7a40cd23a50"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DATERN1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1263" y="0" width="174" height="35" uuid="14e2b935-7cf5-4bd0-aa47-6785a9e1e52c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OKCUNM2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1437" y="0" width="131" height="35" uuid="d3afcce9-8dad-4a9f-91b2-ac285701c28b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ADDR1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="275" y="0" width="140" height="35" uuid="1fab051b-ef24-4ba1-b1b4-8414db609bb8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="415" y="0" width="135" height="35" uuid="f96db571-c8f3-40a2-bd5a-001eb16fae1f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="550" y="0" width="140" height="35" uuid="5eb459e2-6cfe-487a-a396-3eb5f5cdd8ac"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="690" y="0" width="135" height="35" uuid="09c34b76-96b6-427f-ba6e-966c0437f487"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2130" y="0" width="97" height="35" uuid="e3f69833-3365-4f67-b834-67caec6c132a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[เนื้อเป็ด]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="2227" y="0" width="93" height="35" uuid="81d0bb39-bfeb-4cb9-b9d2-7d94e02d8f4a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="2320" y="0" width="99" height="35" uuid="f17e16af-00aa-405b-8227-e936a4b5712e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTTRQT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2419" y="0" width="79" height="35" uuid="0dcf1e79-a685-4142-bda4-9ac6bd1e37b3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2498" y="0" width="93" height="35" uuid="b58685ad-f927-42dd-8d7c-b24171e384d4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="2591" y="0" width="111" height="35" uuid="e72073b5-e1b5-41b6-b9f9-4d0f6a494b51"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NODOCUMENT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="825" y="0" width="182" height="35" uuid="b4ff1c79-130d-4210-ab62-e66db4de757a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[บริษัท บางกอกแรนช์ จำกัด (มหาชน)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1007" y="0" width="156" height="35" uuid="a31f3a06-2ea4-4bf5-bcc8-729bb243e956"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[11003]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="1568" y="0" width="125" height="35" uuid="b461e647-534c-41b1-9e15-03416c7fd211"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ADDR2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1693" y="0" width="116" height="35" uuid="f1176331-584e-4693-b617-e1f72ba31a5c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ADDR3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1809" y="0" width="107" height="35" uuid="e68a5bff-b5cd-4b56-a2b6-9eabeb34b5e6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ADDR4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1916" y="0" width="107" height="35" uuid="676564d2-609c-49ab-81d0-dff3749f539c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CITY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2023" y="0" width="107" height="35" uuid="ee50bbfb-48f7-4a06-8b88-ac838e63f393"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PROVINCE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 5.5.2  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptCerDoctorHead" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="5a900ae6-ad16-4330-ae25-10eab23824a5">
+	<property name="ireport.zoom" value="2.196150000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="678"/>
+	<parameter name="POAORNO" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ThaiBaht" class="java.lang.String"/>
+	<parameter name="year" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT B.UBORNO,A.UAIVNO,
+
+
+ SUBSTR(A.UAIVDT,7,2) as Datess
+,SUBSTR(A.UAIVDT,5,2) as Monthss ,  CAST(SUBSTR(A.UAIVDT,1,4)as INT)+543  AS YEARS
+
+,A.UACUNO,RTRIM(E.OKCUA1)||' '||RTRIM(E.OKCUA2)||' '||RTRIM(E.OKCUA3) ADDR,SUM(C.MTTRQT*-1) MTTRQT,sum(c.MTCAWE * -1)AS MTCAWE
+,ffff.NODOCTOR,ffff.DNAME,GGGGG.NODOCUMENT
+,TRIM(CUSTNAMES.OPCUA1)||TRIM(CUSTNAMES.OPCUA2) as OKCUNM,E.OKCUNM AS OKCUNM2
+
+,(
+
+SELECT MAX(I.IRYRE1) AS IRYRE1
+
+
+
+
+FROM M3FDBPRD.ODHEAD A,M3FDBPRD.ODLINE B,M3FDBPRD.MITTRA C,M3FDBPRD.MITMAS D,
+     BRLDTA0100.FAR_LOTDATE E,BRLDTA0100.FAR_LQLDUCK01 F,
+     M3FDBPRD.CIDMAS G,M3FDBPRD.CIDADR H,M3FDBPRD.CIDREF I
+    , brldta0100.PRODOCTOREST14 AS ffff ,BRLDTA0100.PRODOCTORAUTO AS GGGGG
+
+
+WHERE B.UBORNO = C.MTRIDN
+AND B.UBCONO = C.MTCONO
+AND C.MTTTYP = 31
+AND B.UBITNO = C.MTITNO
+AND A.UAORNO = B.UBORNO
+AND A.UACONO = B.UBCONO
+AND A.UACONO = 10
+AND B.UBORNO = $P{POAORNO}
+AND C.MTCONO = D.MMCONO
+AND C.MTITNO = D.MMITNO
+AND (D.MMITGR BETWEEN 'SH01' AND 'SH07'  OR     D.MMITGR = 'MO00')
+AND SUBSTR(C.MTBANO,1,7) = E.LOTD_NO
+AND E.LOTD_DATE = SUBSTRING(CHAR(F.LQLI_SHDATE,ISO),0,5) || SUBSTRING(CHAR(F.LQLI_SHDATE,ISO),6,2) || SUBSTRING(CHAR(F.LQLI_SHDATE,ISO),9,2)
+AND SUBSTR(C.MTBANO,9,2) = F.LQLI_SLOT
+AND G.IDSUNO = H.SASUNo
+AND G.IDCONO = H.SACONO
+AND H.SASUNO = I.IRSUNO
+AND H.SACONO = I.IRCONO
+AND H.SAADID = 'ADDR'
+AND I.IRRFTY = '35'
+AND G.IDSUNO = F.LQLI_SUPP
+AND G.IDCONO = 10
+AND A.UAIVDT  BETWEEN ffff.STARTDATE AND ffff.ENDDATE
+AND GGGGG.UBORNO=A.UAORNO
+AND A.UACONO = F.CONOID
+
+
+
+
+
+) as IRYRE1
+
+FROM M3FDBPRD.ODHEAD A,M3FDBPRD.ODLINE B,M3FDBPRD.MITTRA C,M3FDBPRD.MITMAS D,
+     M3FDBPRD.OCUSMA E , brldta0100.PRODOCTOREST14 AS ffff ,BRLDTA0100.PRODOCTORAUTO AS GGGGG
+     ,M3FDBPRD.OCUSAD AS CUSTNAMES
+WHERE B.UBORNO = C.MTRIDN
+AND B.UBCONO = C.MTCONO
+AND C.MTTTYP = 31
+AND B.UBITNO = C.MTITNO
+AND A.UAORNO = B.UBORNO
+AND A.UACONO = B.UBCONO
+AND A.UACONO = 10
+AND B.UBORNO = $P{POAORNO}
+AND C.MTCONO = D.MMCONO
+AND C.MTITNO = D.MMITNO
+AND (D.MMITGR BETWEEN 'SH01' AND 'SH07'  OR     D.MMITGR = 'MO00')
+AND A.UACONO = E.OKCONO
+AND CUSTNAMES.OPCUNO=A.UACUNO
+AND CUSTNAMES.OPCONO=A.UACONO
+AND A.UACUNO = E.OKCUNO
+AND A.UAIVDT  BETWEEN ffff.STARTDATE AND ffff.ENDDATE
+AND GGGGG.UBORNO=A.UAORNO
+AND OPADID='DELI01'
+AND B.UBDLIX=C.MTRIDI
+AND B.UBPONR=C.MTRIDL
+AND A.UADLIX=C.MTRIDI
+
+
+
+GROUP BY B.UBORNO,A.UAIVNO,A.UAIVDT,A.UACUNO,E.OKCUNM,RTRIM(E.OKCUA1)||' '||RTRIM(E.OKCUA2)||' '||RTRIM(E.OKCUA3)
+
+,ffff.NODOCTOR,ffff.DNAME,GGGGG.NODOCUMENT,CUSTNAMES.OPCUA1,CUSTNAMES.OPCUA2]]>
+	</queryString>
+	<field name="UBORNO" class="java.lang.String"/>
+	<field name="UAIVNO" class="java.math.BigDecimal"/>
+	<field name="DATESS" class="java.lang.String"/>
+	<field name="MONTHSS" class="java.lang.String"/>
+	<field name="YEARS" class="java.lang.Integer"/>
+	<field name="UACUNO" class="java.lang.String"/>
+	<field name="ADDR" class="java.lang.String"/>
+	<field name="MTTRQT" class="java.math.BigDecimal"/>
+	<field name="MTCAWE" class="java.math.BigDecimal"/>
+	<field name="NODOCTOR" class="java.lang.String"/>
+	<field name="DNAME" class="java.lang.String"/>
+	<field name="NODOCUMENT" class="java.lang.String"/>
+	<field name="OKCUNM" class="java.lang.String"/>
+	<field name="OKCUNM2" class="java.lang.String"/>
+	<field name="IRYRE1" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="807" splitType="Stretch">
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="323" y="447" width="100" height="20" uuid="a167e865-fe79-496b-aea3-217daababa9d">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTTRQT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="319" y="430" width="100" height="20" uuid="5f278976-bedd-471f-b21d-fcd28af17352">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTCAWE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="251" y="429" width="14" height="26" uuid="f868e664-15c8-4dbc-94b3-434735471424">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[/]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="251" y="445" width="14" height="26" uuid="d0676ec6-07c7-4cff-8c5c-e7b767d27bf1">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[/]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="325" y="500" width="43" height="20" uuid="f6b6a902-7de8-495c-a727-d1ed92976167"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[99/7]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="500" width="22" height="20" uuid="ae0ba764-ab20-47d4-9200-d4eeb81c120a"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="454" y="504" width="82" height="20" uuid="d9215e64-3071-4cc0-aed1-15b2d18e5871">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="167" y="517" width="100" height="20" uuid="a132b8b4-7806-4045-8b55-c340cbd26449"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[คลองเปรง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="321" y="517" width="100" height="20" uuid="7ae7c0f3-2b9b-4470-9d47-ede898f8c784">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[เมืองฉะเชิงเทรา]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="461" y="517" width="100" height="20" uuid="fe2e0dc1-0096-462c-ab8e-d1ec94b5579a">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[ฉะเชิงเทรา]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="456" y="552" width="100" height="20" uuid="4e86325c-3638-4c07-9253-ad540bfa5e14">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[เมืองฉะเชิงเทรา]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="135" y="569" width="100" height="20" uuid="235b4a44-3094-47c5-9ff4-34d2a8482aca">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[ฉะเชิงเทรา]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="309" y="552" width="100" height="20" uuid="2a6a49e1-7482-4cc8-b430-c71f88e4206b">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[คลองเปรง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="527" y="536" width="22" height="20" uuid="c29344ef-5434-4bc4-9c9b-0dc7e91456e5">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="456" y="536" width="43" height="20" uuid="b5fe1fe8-7e89-42ac-be44-0524389a728b"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[99/7]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="133" y="552" width="82" height="20" uuid="f24bc4f5-8820-4c16-b84b-2d07dba4101e"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="304" y="569" width="100" height="20" uuid="7c41960d-2a3b-404f-9b24-2492ae46820c"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[02-6550666]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="522" y="217" width="66" height="20" uuid="f9e07260-d7df-497e-a9aa-4d561a630013">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{YEARS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="442" y="216" width="62" height="20" uuid="fdb93002-916a-4c27-b605-60371404c6fe">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MONTHSS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="385" y="216" width="46" height="20" uuid="76a5bcac-6347-4ec5-ad0e-e516827c62d0">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DATESS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="169" y="485" width="147" height="32" uuid="701e79ae-cc3f-4eed-aba7-c9257b51d324"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13"/>
+				</textElement>
+				<text><![CDATA[บมจ. บิ๊กซี ซูปเปอร์เซ็นเตอร์(ศูนย์กระจายสินค้าฉะเชิงเทรา)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="214" y="529" width="147" height="34" uuid="2b1a37a1-fb33-434d-8bd9-41cdc575fe2b">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="13"/>
+				</textElement>
+				<text><![CDATA[บมจ. บิ๊กซี ซูปเปอร์เซ็นเตอร์(ศูนย์กระจายสินค้าฉะเชิงเทรา)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="454" y="117" width="109" height="20" uuid="5b6d82f7-9cf7-4eea-97e9-8ce918c47ddc">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NODOCUMENT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

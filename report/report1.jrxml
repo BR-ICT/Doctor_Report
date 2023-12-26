@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3e76d54d-abc9-48eb-8c29-86e4f74c23b8">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="bankcode" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT *
+FROM brldta0100.prodoctorauto
+Limit 0,1]]>
+	</queryString>
+	<field name="NOLINES" class="java.lang.Integer"/>
+	<field name="UBORNO" class="java.lang.String"/>
+	<field name="NODOCUMENT" class="java.lang.String"/>
+	<field name="YEARDOCTOR" class="java.math.BigDecimal"/>
+	<field name="ESTCOMPANY" class="java.math.BigDecimal"/>
+	<field name="RUNNINGNO" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="4" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<componentElement>
+				<reportElement x="37" y="51" width="200" height="50" uuid="951a1fbb-9af8-4f27-83ef-2b72affe182f"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$P{bankcode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement x="267" y="47" width="200" height="50" uuid="ba75692a-2948-4c67-aec2-bf47421c9ff5"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$P{bankcode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField>
+				<reportElement x="52" y="74" width="183" height="20" uuid="7072131f-f77d-4a97-8c20-ce67fba2cf7f"/>
+				<textFieldExpression><![CDATA[$P{bankcode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="72" width="183" height="20" uuid="53f4c37e-7974-424e-a9d1-3c1ccfe83d8d"/>
+				<textFieldExpression><![CDATA[$P{bankcode}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="4" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

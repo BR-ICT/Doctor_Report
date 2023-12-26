@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptSummaryDoctorMonth" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2dd9281f-66c9-4a48-a67b-726071430582">
+	<property name="ireport.zoom" value="1.331000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="FromDate" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ToDate" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT GGGGG.DATERUNREPORT,B.UBORNO
+,SUBSTR(DATERUNREPORT,7,2)||'/' || SUBSTR(DATERUNREPORT,5,2)||'/'|| CAST(CAST(SUBSTR(DATERUNREPORT,1,4)as INT)+543 AS VARCHAR(200))  AS DATERN1
+
+,SUBSTR(A.UAIVDT,7,2) as Datess
+,SUBSTR(A.UAIVDT,5,2) as Monthss ,  CAST(SUBSTR(A.UAIVDT,1,4)as INT)+543  AS YEARS
+,TRIM(CUSTNAMES.OPCUA1)||TRIM(CUSTNAMES.OPCUA2) as OKCUNM
+
+,SUM(C.MTTRQT*-1) MTTRQT
+,ffff.NODOCTOR,ffff.DNAME,GGGGG.NODOCUMENT
+,ffff.NODOCTOR2,ffff.DNAME3
+
+FROM M3FDBPRD.ODHEAD A,M3FDBPRD.ODLINE B,M3FDBPRD.MITTRA C,M3FDBPRD.MITMAS D,
+     M3FDBPRD.OCUSMA E , brldta0100.PRODOCTOREST14 AS ffff ,BRLDTA0100.PRODOCTORAUTO AS GGGGG
+    ,M3FDBPRD.OCUSAD AS CUSTNAMES
+WHERE B.UBORNO = C.MTRIDN
+AND B.UBCONO = C.MTCONO
+AND C.MTTTYP = 31
+AND B.UBITNO = C.MTITNO
+AND A.UAORNO = B.UBORNO
+AND A.UACONO = B.UBCONO
+AND A.UACONO = 10
+AND GGGGG.DATERUNREPORT BETWEEN  $P{FromDate} AND $P{ToDate}
+AND C.MTCONO = D.MMCONO
+AND C.MTITNO = D.MMITNO
+AND D.MMITGR BETWEEN 'SH01'
+AND 'SH07'
+AND A.UACONO = E.OKCONO
+AND A.UACUNO = E.OKCUNO
+AND A.UAIVDT  BETWEEN ffff.STARTDATE AND ffff.ENDDATE
+AND GGGGG.UBORNO=A.UAORNO
+AND CUSTNAMES.OPCUNO=A.UACUNO
+AND CUSTNAMES.OPCONO=A.UACONO
+AND OPADID='DELI01'
+
+GROUP BY GGGGG.DATERUNREPORT,B.UBORNO,A.UAIVNO,A.UAIVDT,A.UACUNO,E.OKCUNM,RTRIM(E.OKCUA1)||' '||RTRIM(E.OKCUA2)||' '||RTRIM(E.OKCUA3)
+
+,ffff.NODOCTOR,ffff.DNAME,GGGGG.NODOCUMENT,CUSTNAMES.OPCUA1,CUSTNAMES.OPCUA2
+,ffff.NODOCTOR2,ffff.DNAME3
+
+ORDER BY GGGGG.NODOCUMENT]]>
+	</queryString>
+	<field name="DATERUNREPORT" class="java.math.BigDecimal"/>
+	<field name="UBORNO" class="java.lang.String"/>
+	<field name="DATERN1" class="java.lang.String"/>
+	<field name="DATESS" class="java.lang.String"/>
+	<field name="MONTHSS" class="java.lang.String"/>
+	<field name="YEARS" class="java.lang.Integer"/>
+	<field name="OKCUNM" class="java.lang.String"/>
+	<field name="MTTRQT" class="java.math.BigDecimal"/>
+	<field name="NODOCTOR" class="java.lang.String"/>
+	<field name="DNAME" class="java.lang.String"/>
+	<field name="NODOCUMENT" class="java.lang.String"/>
+	<field name="NODOCTOR2" class="java.lang.String"/>
+	<field name="DNAME3" class="java.lang.String"/>
+	<variable name="PageTotal" class="java.lang.Integer">
+		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
+	</variable>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="195" splitType="Stretch">
+			<staticText>
+				<reportElement x="181" y="13" width="191" height="27" uuid="842a6df3-ec30-4a8a-b8e0-928c3f06845e"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="18"/>
+				</textElement>
+				<text><![CDATA[แบบรายงานรับรองให้จำหน่ายเนื้อสัตว์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="99" y="44" width="59" height="20" uuid="585ed787-a46b-41ed-bc19-322fbbca82ee"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[Date From]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="49" y="80" width="97" height="20" uuid="9b83c9ef-97ee-4b1d-852b-a0549fba0fda"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[ชื่อพนักงานตรวจโรคสัตว์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="308" y="80" width="37" height="20" uuid="b557051a-b1e9-4129-9fbe-0dfff084f7c9"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[ทะเบียน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="138" y="79" width="163" height="20" uuid="4910a809-87c5-4b95-96f2-68a3c4445964"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[.........................................................................]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="346" y="81" width="163" height="20" uuid="7598ec1b-46a1-4bc4-9ed0-87bd63289af2"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[.......................................................................]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="49" y="137" width="48" height="20" uuid="83b713da-575c-4e90-b091-06c6c7e6aa8f"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[โรงฆ่าสัตว์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="95" y="138" width="177" height="20" uuid="58cf63ea-d2f9-4f95-ae31-9f130239f5ed"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[...............................................................................]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="272" y="139" width="73" height="20" uuid="7ed085c5-c96c-4065-8383-79dbcdfee3c7"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[ทะเบียนโรงฆ่าสัตว์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="346" y="139" width="163" height="20" uuid="8a97eeaa-f639-4f6a-a9e9-24599b1ba6c1"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[.........................................................................]]></text>
+			</staticText>
+			<line>
+				<reportElement x="-1" y="172" width="555" height="1" uuid="96829f1b-4617-4d08-9bcf-b751cba3674e"/>
+			</line>
+			<line>
+				<reportElement x="-1" y="194" width="555" height="1" uuid="0fb012f3-ffe9-4e3b-aeca-ff15a71813b6"/>
+			</line>
+			<line>
+				<reportElement x="-1" y="172" width="1" height="22" uuid="46cbea69-2e46-43c4-a5db-edc7e5f2ecc9"/>
+			</line>
+			<line>
+				<reportElement x="553" y="172" width="1" height="22" uuid="fae5bc85-577b-4c55-b39f-37999c6b9cac"/>
+			</line>
+			<line>
+				<reportElement x="76" y="172" width="1" height="22" uuid="77b44dda-ec24-450c-92d8-407803d58cd6"/>
+			</line>
+			<line>
+				<reportElement x="130" y="172" width="1" height="22" uuid="199939b7-88e2-4ff8-963b-df608b433361"/>
+			</line>
+			<line>
+				<reportElement x="221" y="173" width="1" height="22" uuid="78a80db6-fe21-45c6-9082-a6ae5f73c11d"/>
+			</line>
+			<line>
+				<reportElement x="291" y="172" width="1" height="22" uuid="313c2497-ce17-4412-b614-8a0ca6ec871a"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="173" width="76" height="20" uuid="ef1e337c-494c-43c0-a804-03a2b119d66a"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[วันที่]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="78" y="173" width="53" height="20" uuid="08b63412-bb50-4c5c-9f7c-cfc627cddc72"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[แบบ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="132" y="173" width="75" height="20" uuid="74799c94-bfe9-4cf5-bde1-25bed2cf1d43"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[เลขที่]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="375" y="173" width="177" height="20" uuid="41e02dc9-29c5-4eaa-bc2a-c162a6af0f0a"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[ชื่อเจ้าของสัตว์]]></text>
+			</staticText>
+			<line>
+				<reportElement x="373" y="172" width="1" height="22" uuid="4d1510aa-f3cd-4321-b147-d4ac5b9bada6"/>
+			</line>
+			<staticText>
+				<reportElement x="294" y="173" width="79" height="20" uuid="6289a18e-facf-4e1c-906c-aff4687b886b"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[น้ำหนัก]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="221" y="173" width="68" height="20" uuid="c357dc4b-1cc1-4563-aad5-a1d5da176168"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[ชนิดเนื้อสัตว์]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="148" y="75" width="165" height="20" uuid="eb98f811-d3b3-42ab-bd69-7f5a07151700"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DNAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="351" y="77" width="159" height="20" uuid="f08bf6cd-95cb-4cba-8c6d-6c028e44e2c7"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NODOCTOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="105" y="135" width="148" height="20" uuid="e484676c-6173-40c2-9c8a-112a3a4c7937"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[บริษัท บางกอกแร้นซ์ จำกัด (มหาชน)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="351" y="135" width="100" height="20" uuid="6466a458-ffb0-416b-ba4c-70ca85fb8639"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="15"/>
+				</textElement>
+				<text><![CDATA[๑๑๐๐๓]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="513" y="5" width="19" height="20" uuid="de2a412c-c056-4ed9-9441-3253a6e23004"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Of]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="491" y="5" width="22" height="20" uuid="5b72209a-e1b6-4f60-b637-025e4fbf035a"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="459" y="5" width="32" height="20" uuid="6351991b-d97b-40b5-b491-b9c7c2988efb"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Page]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="532" y="5" width="21" height="20" uuid="9ed9b3ed-fe96-4377-8806-1914ceb0bc7b"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PageTotal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="49" y="105" width="97" height="20" uuid="5ae99f71-3a47-49dc-ba30-97083b1ac46d"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[ชื่อพนักงานตรวจโรคสัตว์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="141" y="109" width="163" height="20" uuid="dd30ec98-296c-4d50-833d-4f409bc1e1cf"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[.........................................................................]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="348" y="110" width="163" height="20" uuid="00e1fc04-bbaa-4c84-b759-c1b007a3642f"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[.........................................................................]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="309" y="109" width="37" height="20" uuid="56647f8e-09b2-4620-bc8f-f5bc7258c6b1"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[ทะเบียน]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="351" y="106" width="159" height="16" uuid="e58dcdf8-f2ba-4e78-a722-53ed1711c5fb"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NODOCTOR2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="149" y="105" width="152" height="17" uuid="ef7b3c00-0754-4295-8628-99a5a86a2edb"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DNAME3}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="321" y="43" width="59" height="20" uuid="c92efaa4-62af-4529-83a0-c68354aa1f56"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[Date To]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="159" y="44" width="100" height="20" uuid="0902ed0c-ca35-45ec-a8d3-4cae934658e3"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FromDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="382" y="43" width="100" height="20" uuid="792c6535-1658-49ba-9aca-a20b02cd3dc6"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ToDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="19" splitType="Stretch">
+			<line>
+				<reportElement x="-1" y="0" width="1" height="19" uuid="9734f8a1-4826-40cd-ae5e-615667f16016"/>
+			</line>
+			<line>
+				<reportElement x="76" y="0" width="1" height="19" uuid="d73dcf83-29f7-40e6-8206-a499e22b2ed1"/>
+			</line>
+			<line>
+				<reportElement x="130" y="0" width="1" height="19" uuid="5ff2d704-7ca3-4885-92fe-1ec876df108f"/>
+			</line>
+			<line>
+				<reportElement x="221" y="0" width="1" height="19" uuid="c39694ae-4a2d-44d5-80de-6e20e59613e0"/>
+			</line>
+			<line>
+				<reportElement x="291" y="0" width="1" height="19" uuid="32b93fbc-dda4-4cd9-8966-52959157025b"/>
+			</line>
+			<line>
+				<reportElement x="373" y="0" width="1" height="19" uuid="fc69b8b9-f288-4e59-bffe-9420d4e72467"/>
+			</line>
+			<line>
+				<reportElement x="553" y="0" width="1" height="19" uuid="6258359d-0fe7-42a1-a014-bc6ed9ff6bf3"/>
+			</line>
+			<line>
+				<reportElement x="0" y="18" width="553" height="1" uuid="154110c0-147d-45e4-850a-bf1fcbeff865"/>
+			</line>
+			<textField>
+				<reportElement x="1" y="-1" width="75" height="20" uuid="f334592e-e131-442d-ae27-a3592e4140d2"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DATERN1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="80" y="1" width="50" height="17" uuid="cff5d429-3212-4bb6-8d26-9a823d85d3fa"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[ร.น ๑]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="133" y="1" width="88" height="16" uuid="53bb4a04-0dce-4dc4-897e-b22e53fb9ddc"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NODOCUMENT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="223" y="2" width="66" height="16" uuid="89197d28-7749-454e-a24e-16a84bd6fe02"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[เป็ด]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="293" y="1" width="60" height="16" uuid="40acec2e-0de3-4fd9-8557-3d617d822931"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTTRQT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="356" y="1" width="16" height="16" uuid="8f9e89dd-4a1b-4ded-b646-5876ce686292"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[ก.ก]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="374" y="2" width="180" height="17" uuid="75ed2345-117c-40ea-9e77-f8b0abc207ad"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OKCUNM}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

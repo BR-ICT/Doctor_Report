@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 5.5.2  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptCerDoctorHead_THMAX" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="5a900ae6-ad16-4330-ae25-10eab23824a5">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="349"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="192"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="sav_no" class="java.lang.String"/>
+	<parameter name="WHS_Name" class="java.lang.String"/>
+	<parameter name="WHS_Code" class="java.lang.String"/>
+	<parameter name="WHS_Address" class="java.lang.String"/>
+	<parameter name="DAY" class="java.lang.String"/>
+	<parameter name="MONTH" class="java.lang.String"/>
+	<parameter name="YEAR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT TOP (100) PERCENT d.UserName, d.DB2COM, d.DB2DIV, d.company, d.address, a.Sav_no, a.Sav_date, a.Warehouse, a.Truck_no, a.Driver_name, a.Seal_no, a.Close_time, a.DO_id_list, a.Item_no, a.ProductName, a.Pack, a.Weight, a.Pack *  a.Weight as sum_wg,a.SaveType, a.Print_time, a.SpendTime, a.Cancel, 
+             a.Location, a.Description, '  ' AS mmspe1, '  ' AS mmspe2,DAY(GETDATE()) as DAY , MONTH(GETDATE()) as MONTH , YEAR(GETDATE())+543 as YEAR
+FROM   (SELECT TOP (100) PERCENT BRLAS400.dbo.T_ThaiMaxSave_no.Sav_no, BRLAS400.dbo.T_ThaiMaxSave_no.Sav_date, BRLAS400.dbo.T_Thaimax_Whs.Description AS Warehouse, BRLAS400.dbo.T_ThaiMaxSave_no.Truck_no, BRLAS400.dbo.T_ThaiMaxSave_no.Driver_name, BRLAS400.dbo.T_ThaiMaxSave_no.Seal_no, 
+                           BRLAS400.dbo.T_ThaiMaxSave_no.Close_time, BRLAS400.dbo.T_ThaiMaxSave_no.DO_id_list, BRLAS400.dbo.T_ThaiMaxSave_detail.Item_no, BRLAS400.dbo.ItemData_Distinct_2.ProductName, BRLAS400.dbo.T_ThaiMaxSave_detail.Pack, BRLAS400.dbo.T_ThaiMaxSave_detail.Weight, BRLAS400.dbo.T_ThaiMax_Type.SaveType, 
+                           BRLAS400.dbo.T_ThaiMaxSave_no.Print_time, BRLAS400.dbo.T_ThaiMaxSave_no.Print_time - BRLAS400.dbo.T_ThaiMaxSave_no.Close_time AS SpendTime, CASE WHEN CANCEL = 1 THEN 'CANCEL' WHEN CANCEL = 0 THEN ' ' END AS Cancel, BRLAS400.dbo.T_ThaiMaxSave_no.Location, 
+                           BRLAS400.dbo.Tbl_Whs.Description
+              FROM         BRLAS400.dbo.ItemData_Distinct_2 INNER JOIN
+                           BRLAS400.dbo.T_ThaiMaxSave_no INNER JOIN
+                           BRLAS400.dbo.T_ThaiMax_Type INNER JOIN
+                           BRLAS400.dbo.T_ThaiMaxSave_detail ON BRLAS400.dbo.T_ThaiMax_Type.SavType_id = BRLAS400.dbo.T_ThaiMaxSave_detail.SavType_id ON BRLAS400.dbo.T_ThaiMaxSave_no.Sav_no = BRLAS400.dbo.T_ThaiMaxSave_detail.Sav_no ON 
+                           BRLAS400.dbo.ItemData_Distinct_2.ItemCode = BRLAS400.dbo.T_ThaiMaxSave_detail.Item_no LEFT OUTER JOIN
+                           BRLAS400.dbo.Tbl_Whs ON BRLAS400.dbo.T_ThaiMaxSave_no.Location = BRLAS400.dbo.Tbl_Whs.Location LEFT OUTER JOIN
+                           BRLAS400.dbo.T_Thaimax_Whs ON BRLAS400.dbo.T_ThaiMaxSave_no.Warehouse = BRLAS400.dbo.T_Thaimax_Whs.Warehouse
+             WHERE  (BRLAS400.dbo.T_ThaiMaxSave_no.Sav_date >= '01-JAN-19')
+             ORDER BY BRLAS400.dbo.T_ThaiMaxSave_no.Sav_no DESC) AS a LEFT OUTER JOIN
+                 (SELECT SUBSTRING(DO_id_list, 2, 6) AS do_id, Sav_no
+                 FROM    BRLAS400.dbo.T_ThaiMaxSave_no AS T_ThaiMaxSave_no_1) AS b ON b.Sav_no = a.Sav_no LEFT OUTER JOIN
+                 (SELECT DO_id, User_id
+                 FROM    BRLAS400.dbo.Tbl_DO_id_no) AS c ON c.DO_id = b.do_id LEFT OUTER JOIN
+                 (SELECT UserName, DB2COM, DB2DIV, CASE WHEN DB2COM = '400' THEN 'บริษัท ฟู้ด ซิตี้ จำกัด' ELSE 'บริษัท บางกอกแร้นช์ จำกัด (มหาชน)' END AS company, CASE WHEN DB2COM = '400' THEN '' ELSE 'โทร. 0-2337-3280-3 โทรสาร. 0-2337-3293' END AS address
+                 FROM    BRLAS400.dbo.Tbl_User) AS d ON d.UserName = c.User_id
+WHERE (a.Sav_no =  $P{sav_no} )
+ORDER BY a.Sav_no DESC]]>
+	</queryString>
+	<field name="UserName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="UserName"/>
+	</field>
+	<field name="DB2COM" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DB2COM"/>
+	</field>
+	<field name="DB2DIV" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DB2DIV"/>
+	</field>
+	<field name="company" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="company"/>
+	</field>
+	<field name="address" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="address"/>
+	</field>
+	<field name="Sav_no" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="Sav_no"/>
+	</field>
+	<field name="Sav_date" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="Sav_date"/>
+	</field>
+	<field name="Warehouse" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Warehouse"/>
+	</field>
+	<field name="Truck_no" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Truck_no"/>
+	</field>
+	<field name="Driver_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Driver_name"/>
+	</field>
+	<field name="Seal_no" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Seal_no"/>
+	</field>
+	<field name="Close_time" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="Close_time"/>
+	</field>
+	<field name="DO_id_list" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DO_id_list"/>
+	</field>
+	<field name="Item_no" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Item_no"/>
+	</field>
+	<field name="ProductName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ProductName"/>
+	</field>
+	<field name="Pack" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="Pack"/>
+	</field>
+	<field name="Weight" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="Weight"/>
+	</field>
+	<field name="sum_wg" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="sum_wg"/>
+	</field>
+	<field name="SaveType" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="SaveType"/>
+	</field>
+	<field name="Print_time" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="Print_time"/>
+	</field>
+	<field name="SpendTime" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="SpendTime"/>
+	</field>
+	<field name="Cancel" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Cancel"/>
+	</field>
+	<field name="Location" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Location"/>
+	</field>
+	<field name="Description" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Description"/>
+	</field>
+	<field name="mmspe1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="mmspe1"/>
+	</field>
+	<field name="mmspe2" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="mmspe2"/>
+	</field>
+	<field name="DAY" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="DAY"/>
+	</field>
+	<field name="MONTH" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="MONTH"/>
+	</field>
+	<field name="YEAR" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="YEAR"/>
+	</field>
+	<variable name="sum_wg1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{Weight}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="817" splitType="Stretch">
+			<textField evaluationTime="Page" pattern="#,##0.00;-#,##0.00">
+				<reportElement x="332" y="457" width="100" height="20" uuid="a167e865-fe79-496b-aea3-217daababa9d"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sum_wg1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="188" y="516" width="177" height="20" uuid="79379bf8-8d79-4c50-97f4-49689d42accc"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{WHS_Name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="86" y="627" width="100" height="20" uuid="0e52e7ce-fcaf-4916-877c-04df28c253cc"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[2. ที่อยู่เจ้าของเนื้อสัตว์ :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="86" y="610" width="100" height="20" uuid="186903c2-a137-440e-ae5a-c5bacc75be3a"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[1. ที่อยู่สถานที่ปลายทาง :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="265" y="454" width="14" height="26" uuid="d0676ec6-07c7-4cff-8c5c-e7b767d27bf1"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[/]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="610" width="68" height="20" uuid="3d1a666f-c35b-4b76-a5e2-c66eb7c6038d"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[หมายเหตุ :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="394" y="220" width="44" height="20" uuid="80733266-9ac9-4ad6-b3ff-15f890bf7b67"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DAY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="454" y="220" width="55" height="20" uuid="701aeb90-fcaa-47b1-bfaf-af497df36da2"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{MONTH}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="527" y="220" width="77" height="20" uuid="472334c6-ea3f-479d-947c-eaa26f90bbdf"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{YEAR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="186" y="610" width="338" height="20" uuid="335fbb02-2b94-409e-b70e-cb22bee35097"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{WHS_Address}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="186" y="627" width="394" height="36" uuid="8dddcae5-0079-4b89-bf2c-f6c7dd989d47"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[บริษัท บางกอกแร้นช์ จำกัด (มหาชน) 18/1 หมู่ 12 ถนนสายหลังวัดบางพลีใหญ่ใน ตำบลบางพลีใหญ่ อำเภอบางพลี จังหวัดสมุทรปราการ 10540]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</summary>
+</jasperReport>

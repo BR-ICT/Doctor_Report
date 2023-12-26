@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 5.5.2  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptCerDoctorHead" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="5a900ae6-ad16-4330-ae25-10eab23824a5">
+	<property name="ireport.zoom" value="1.5000000000000024"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="274"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="M3"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="Program" class="java.lang.String"/>
+	<parameter name="User" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT *
+FROM(
+SELECT A.ROWPRENUM,B.PDR_START ,B.PDR_END --, B.PDR_CODE || '/' || B.PDR_YEAR || '/'  || TRIM(TO_CHAR(A.ROWPRENUM,'000000')) AS RUNNING
+,B.PDR_CODE, B.PDR_YEAR, B.PDR_MONTH, B.PDR_START, B.PDR_END,VARCHAR_FORMAT(CURRENT TIMESTAMP, 'YYYYMMDD') AS DATENOW
+,CASE WHEN B.PDR_PROGRAM = 'THAIMAX' THEN B.PDR_CODE || '/' || B.PDR_YEAR || '/'  || 'THMAX' ||TRIM(TO_CHAR(A.ROWPRENUM,'000000'))
+WHEN B.PDR_PROGRAM = 'Farm' THEN B.PDR_CODE || '/' || B.PDR_YEAR || '/'  || 'F' ||TRIM(TO_CHAR(A.ROWPRENUM,'000000')) ELSE
+B.PDR_CODE || '/' || B.PDR_YEAR || '/'  || TRIM(TO_CHAR(A.ROWPRENUM,'000000')) END AS RUNNING
+FROM BRLDTA0100.ROW_PREREPORT A,BRLDTA0100.PRODOCRUNNING B
+WHERE A.ROWPRENUM BETWEEN int(B.PDR_START) AND int(B.PDR_END)
+AND B.PDR_CONO = '10'
+AND B.PDR_DIVI = '101'
+AND B.PDR_USER =   $P{User}
+AND B.PDR_PROGRAM =   $P{Program}
+ORDER BY RUNNING ASC
+) C LEFT JOIN (
+SELECT DNAME ,NODOCTOR ,DNAME3,VARCHAR_FORMAT(CURRENT TIMESTAMP, 'YYYYMMDD') AS DDD
+FROM brldta0100.PRODOCTOREST14
+WHERE STARTDATE < VARCHAR_FORMAT(CURRENT TIMESTAMP, 'YYYYMMDD')
+AND ENDDATE > VARCHAR_FORMAT(CURRENT TIMESTAMP, 'YYYYMMDD')
+) D ON D.DDD = C.DATENOW]]>
+	</queryString>
+	<field name="ROWPRENUM" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="ROWPRENUM"/>
+	</field>
+	<field name="PDR_S00001" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="PDR_S00001"/>
+	</field>
+	<field name="PDR_E00001" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="PDR_E00001"/>
+	</field>
+	<field name="PDR_CODE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="PDR_CODE"/>
+	</field>
+	<field name="PDR_YEAR" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="PDR_YEAR"/>
+	</field>
+	<field name="PDR_MONTH" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="PDR_MONTH"/>
+	</field>
+	<field name="PDR_START" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="PDR_START"/>
+	</field>
+	<field name="PDR_END" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="PDR_END"/>
+	</field>
+	<field name="DATENOW" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DATENOW"/>
+	</field>
+	<field name="RUNNING" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="RUNNING"/>
+	</field>
+	<field name="DNAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DNAME"/>
+	</field>
+	<field name="NODOCTOR" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="NODOCTOR"/>
+	</field>
+	<field name="DNAME3" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DNAME3"/>
+	</field>
+	<field name="DDD" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DDD"/>
+	</field>
+	<group name="Series">
+		<groupExpression><![CDATA[$F{RUNNING}]]></groupExpression>
+		<groupHeader>
+			<band height="807">
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<textField>
+					<reportElement x="460" y="110" width="109" height="20" uuid="110c7bef-0c19-4e1b-9359-3c3a2360a3f4">
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{RUNNING}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="407" y="194" width="148" height="20" uuid="ef0c6134-dd3f-479c-965b-cc9035c98000"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[บริษัท บางกอกแร้นซ์ จำกัด (มหาชน)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="169" y="253" width="14" height="26" uuid="e05ea11c-304f-4dd2-9040-4b3136863f02"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="18" isBold="true"/>
+					</textElement>
+					<text><![CDATA[/]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="345" y="259" width="141" height="20" uuid="17118f02-00a3-4f60-a99d-9e28630344bf"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[บริษัท บางกอกแร้นช์ จำกัด (มหาชน).]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="168" y="348" width="14" height="26" uuid="c0c10bf2-59b1-4183-ad73-c7f923c81ccf">
+						<printWhenExpression><![CDATA[$P{Program}.equalsIgnoreCase("Farm") ? false : true]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="18" isBold="true"/>
+					</textElement>
+					<text><![CDATA[/]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="175" y="441" width="104" height="20" uuid="8bef1325-61e2-44a3-a3fd-89922cb25636">
+						<printWhenExpression><![CDATA[$P{Program}.equalsIgnoreCase("Farm") ? false : true]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[เป็ด]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="134" y="495" width="100" height="20" uuid="afafc39c-6613-4bb8-a122-f30d8412a984"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[(ตามเอกสารแนบ)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="332" y="515" width="100" height="20" uuid="907638c9-e5c6-4d9e-aa55-9df99b4cdd70"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<text><![CDATA[(ตามหมายเหตุ 1 )]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="219" y="550" width="100" height="20" uuid="698cbf55-3f84-42b7-aaf2-8b2929190f2b"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="14"/>
+					</textElement>
+					<text><![CDATA[(ตามหมายเหตุ 2 )]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="486" y="240" width="100" height="20" uuid="896320c4-347a-4b07-b437-b9ae4ecc1b53"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{NODOCTOR}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="207" y="237" width="186" height="20" uuid="7ad09de5-4d83-4f7e-9520-c820929ee42e"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DNAME}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="352" y="660" width="136" height="20" uuid="e8b13659-3e94-4525-a601-ef401ae0647b"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DNAME}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="247" y="421" width="100" height="20" uuid="6e113931-6857-4790-b0a9-437e25ac9eb9"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[(ตามเอกสารแนบ)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="168" y="373" width="14" height="26" uuid="85840492-7095-41c0-afd6-75f797c031ae">
+						<printWhenExpression><![CDATA[$P{Program}.equalsIgnoreCase("Farm") ? true : false]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="18" isBold="true"/>
+					</textElement>
+					<text><![CDATA[/]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="353" y="280" width="141" height="20" uuid="a01bb557-25c6-413f-8851-0ac1df2731e2"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[11003]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

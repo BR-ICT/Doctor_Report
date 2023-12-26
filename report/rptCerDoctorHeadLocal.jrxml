@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 5.5.2  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptCerDoctorHead" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="5a900ae6-ad16-4330-ae25-10eab23824a5">
+	<property name="ireport.zoom" value="1.2396694214876032"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="17"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DB2"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="281"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="713"/>
+	<parameter name="POAORNO" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ThaiBaht" class="java.lang.String"/>
+	<parameter name="year" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT B.UBORNO,A.UAIVNO,SUBSTR(A.UAIVDT,7,2) AS Datess,SUBSTR(A.UAIVDT,5,2) AS Monthss, CAST(SUBSTR(A.UAIVDT,1,4) AS INT) + 543 AS YEARS
+,A.UACUNO,RTRIM(E.OKCUA1)||' '||RTRIM(E.OKCUA2)||' '||RTRIM(E.OKCUA3) ADDR,SUM(C.MTTRQT*-1) MTTRQT,sum(c.MTCAWE * -1)AS MTCAWE
+,ffff.NODOCTOR,ffff.DNAME
+,ESTCOMPANY || '/' || SUBSTRING(INRNNO,0,3) || '/' || SUBSTRING(INRNNO,3) AS NODOCUMENT
+,TRIM(CUSTNAMES.OPCUA1)||TRIM(CUSTNAMES.OPCUA2) AS OKCUNM,E.OKCUNM AS OKCUNM2
+,(SELECT MAX(I.IRYRE1) AS IRYRE1
+FROM M3FDBPRD.ODHEAD A,M3FDBPRD.ODLINE B,M3FDBPRD.MITTRA C,M3FDBPRD.MITMAS D,BRLDTA0100.FAR_LOTDATE E,BRLDTA0100.FAR_LQLDUCK01 F
+,M3FDBPRD.CIDMAS G,M3FDBPRD.CIDADR H,M3FDBPRD.CIDREF I
+WHERE B.UBORNO = C.MTRIDN
+AND B.UBCONO = C.MTCONO
+AND C.MTTTYP = 31
+AND B.UBITNO = C.MTITNO
+AND A.UAORNO = B.UBORNO
+AND A.UACONO = B.UBCONO
+AND A.UACONO = 10
+AND A.UACONO = F.CONOID
+AND B.UBORNO = $P{POAORNO}
+AND C.MTCONO = D.MMCONO
+AND C.MTITNO = D.MMITNO
+AND (D.MMITGR BETWEEN 'SH01' AND 'SH07' OR D.MMITGR = 'MO00')
+AND SUBSTR(C.MTBANO,1,7) = E.LOTD_NO
+AND E.LOTD_DATE = SUBSTRING(CHAR(F.LQLI_SHDATE,ISO),0,5) || SUBSTRING(CHAR(F.LQLI_SHDATE,ISO),6,2) || SUBSTRING(CHAR(F.LQLI_SHDATE,ISO),9,2)
+AND SUBSTR(C.MTBANO,9,2) = F.LQLI_SLOT
+AND G.IDSUNO = H.SASUNo
+AND G.IDCONO = H.SACONO
+AND H.SASUNO = I.IRSUNO
+AND H.SACONO = I.IRCONO
+AND H.SAADID = 'ADDR'
+AND I.IRRFTY = '35'
+AND G.IDSUNO = F.LQLI_SUPP
+AND G.IDCONO = 10
+) as IRYRE1
+FROM M3FDBPRD.ODHEAD A,M3FDBPRD.ODLINE B,M3FDBPRD.MITTRA C,M3FDBPRD.MITMAS D,M3FDBPRD.OCUSMA E
+,M3FDBPRD.OCUSAD AS CUSTNAMES,BRLDTA0100.ITEMNRN1 AS ITEMS
+,BRLDTA0100.PRODOCTOREST14 AS ffff
+,BRLDTA0100.INVCNRN1 AS GGGGG
+WHERE B.UBORNO = C.MTRIDN
+AND B.UBCONO = C.MTCONO
+AND C.MTTTYP = 31
+AND B.UBITNO = C.MTITNO
+AND A.UAORNO = B.UBORNO
+AND A.UACONO = B.UBCONO
+AND A.UACONO = 10
+AND B.UBORNO = $P{POAORNO}
+AND C.MTCONO = D.MMCONO
+AND C.MTITNO = D.MMITNO
+AND (D.MMITGR BETWEEN 'SH01' AND 'SH07' OR D.MMITGR = 'MO00')
+AND A.UACONO = E.OKCONO
+AND CUSTNAMES.OPCUNO=A.UACUNO
+AND CUSTNAMES.OPCONO=A.UACONO
+AND A.UACUNO = E.OKCUNO
+AND OPADID='DELI01'
+AND B.UBDLIX=C.MTRIDI
+AND B.UBPONR=C.MTRIDL
+AND A.UADLIX=C.MTRIDI
+AND A.UAIVDT BETWEEN ffff.STARTDATE AND ffff.ENDDATE
+AND ITEMS.RNCONO = B.UBCONO
+AND ITEMS.RNITNO = B.UBITNO
+AND GGGGG.INORNO = A.UAORNO
+GROUP BY B.UBORNO,A.UAIVNO,A.UAIVDT,A.UACUNO,E.OKCUNM,RTRIM(E.OKCUA1)||' '||RTRIM(E.OKCUA2)||' '||RTRIM(E.OKCUA3)
+,ffff.NODOCTOR,ffff.DNAME,ffff.ESTCOMPANY,GGGGG.INRNNO,CUSTNAMES.OPCUA1,CUSTNAMES.OPCUA2]]>
+	</queryString>
+	<field name="UBORNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="UBORNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="UBORNO"/>
+	</field>
+	<field name="UAIVNO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="UAIVNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="UAIVNO"/>
+	</field>
+	<field name="DATESS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DATESS"/>
+		<property name="com.jaspersoft.studio.field.label" value="DATESS"/>
+	</field>
+	<field name="MONTHSS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MONTHSS"/>
+		<property name="com.jaspersoft.studio.field.label" value="MONTHSS"/>
+	</field>
+	<field name="YEARS" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="YEARS"/>
+		<property name="com.jaspersoft.studio.field.label" value="YEARS"/>
+	</field>
+	<field name="UACUNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="UACUNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="UACUNO"/>
+	</field>
+	<field name="ADDR" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ADDR"/>
+		<property name="com.jaspersoft.studio.field.label" value="ADDR"/>
+	</field>
+	<field name="MTTRQT" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MTTRQT"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTTRQT"/>
+	</field>
+	<field name="MTCAWE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MTCAWE"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTCAWE"/>
+	</field>
+	<field name="NODOCTOR" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NODOCTOR"/>
+		<property name="com.jaspersoft.studio.field.label" value="NODOCTOR"/>
+	</field>
+	<field name="DNAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DNAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="DNAME"/>
+	</field>
+	<field name="NODOCUMENT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NODOCUMENT"/>
+		<property name="com.jaspersoft.studio.field.label" value="NODOCUMENT"/>
+	</field>
+	<field name="OKCUNM" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="OKCUNM"/>
+		<property name="com.jaspersoft.studio.field.label" value="OKCUNM"/>
+	</field>
+	<field name="OKCUNM2" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="OKCUNM2"/>
+		<property name="com.jaspersoft.studio.field.label" value="OKCUNM2"/>
+	</field>
+	<field name="IRYRE1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="IRYRE1"/>
+		<property name="com.jaspersoft.studio.field.label" value="IRYRE1"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="807" splitType="Stretch">
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="326" y="450" width="100" height="20" uuid="a167e865-fe79-496b-aea3-217daababa9d">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTTRQT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="190" y="595" width="367" height="20" uuid="d283f59c-264d-4fd7-9a0c-13cc1f0a6612"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OKCUNM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="191" y="611" width="472" height="20" uuid="e8c9102b-b720-4a2f-a5be-66c4a1eb0ede"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ADDR}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd">
+				<reportElement x="383" y="219" width="21" height="20" uuid="c17f9663-d135-481f-aefd-4aaa3f63bc9b">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DATESS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM">
+				<reportElement x="442" y="219" width="29" height="20" uuid="68d4c77e-abc5-4cab-948f-fee408bacc49">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MONTHSS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="504" y="219" width="65" height="20" uuid="b20a3bd9-f08b-423d-b5ec-5e09d5f36ff9">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{year}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="322" y="433" width="100" height="20" uuid="5f278976-bedd-471f-b21d-fcd28af17352">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTCAWE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="176" y="501" width="177" height="20" uuid="79379bf8-8d79-4c50-97f4-49689d42accc">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OKCUNM2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="91" y="610" width="100" height="20" uuid="0e52e7ce-fcaf-4916-877c-04df28c253cc"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[2. ที่อยู่เจ้าของเนื้อสัตว์ :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="91" y="595" width="100" height="20" uuid="186903c2-a137-440e-ae5a-c5bacc75be3a"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[1. ที่อยู่สถานที่ปลายทาง :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="253" y="432" width="14" height="26" uuid="f868e664-15c8-4dbc-94b3-434735471424">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[/]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="253" y="448" width="14" height="26" uuid="d0676ec6-07c7-4cff-8c5c-e7b767d27bf1">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[/]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="45" y="595" width="68" height="20" uuid="3d1a666f-c35b-4b76-a5e2-c66eb7c6038d"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[หมายเหตุ :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="454" y="116" width="109" height="20" uuid="e4670aa4-6f02-4654-b3a4-f13754644a31">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NODOCUMENT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
